@@ -159,6 +159,59 @@ function calculator(inputString) {
     return evalutePostfix(postfix);
 }
 
+// test the parseMathExpressionToTokenList function
+function testParseMathExpressionToTokenList() {
+    // test the parseMathExpressionToTokenList function using the examples above.
+    // If the parseMathExpressionToTokenList function is correct, this function should return true.
+    let testCases = [
+        { input: '1+2', expected: [1, '+', 2] },
+        { input: '1 + 2 * 3', expected: [1, '+', 2, '*', 3] },
+        { input: '1+2*3', expected: [1, '+', 2, '*', 3] },
+        { input: '2.3+4.5*(6.7+1.2/2.0)', expected: [2.3, '+', 4.5, '*', '(', 6.7, '+', 1.2, '/', 2.0, ')'] },
+        { input: '(1 + 2) * 3', expected: ['(', 1, '+', 2, ')', '*', 3] },
+        { input: '(6 / 3) + 3 - 1 / 2', expected: ['(', 6, '/', 3, ')', '+', 3, '-', 1, '/', 2] },
+        { input: '(6 /3)+ 3 -1 /2', expected: ['(', 6, '/', 3, ')', '+', 3, '-', 1, '/', 2] },
+    ];
+    let passed = true;
+    for (let i = 0; i < testCases.length; i++) {
+        let testCase = testCases[i];
+        let actual = parseMathExpressionToTokenList(testCase.input);
+        if (JSON.stringify(actual) !== JSON.stringify(testCase.expected)) {
+            console.log('testParseMathExpressionToTokenList failed for input: ' + testCase.input);
+            console.log('expected: ' + JSON.stringify(testCase.expected));
+            console.log('actual: ' + JSON.stringify(actual));
+            passed = false;
+        }
+    }
+    return passed;
+}
+
+function testInfixToPostfix() {
+    // test the infixToPostfix function using the examples above.
+    // If the infixToPostfix function is correct, this function should return true.
+    let testCases = [
+        { input: '1+2', expected: [1, '+', 2] },
+        { input: '(2*3)', expected: [2, 3, '*'] },
+        { input: '1 + 2 * 3', expected: [1, 2, 3, '*', '+'] },
+        { input: '2.3+4.5*(6.7+1.2/2.0)', expected: [2.3, 4.5, 6.7, 1.2, 2.0, '/', '+', '*', '+'] },
+        { input: '(1 + 2) * 3', expected: [1, 2, '+', 3, '*'] },
+        { input: '(6 / 3) + 3 - 1 / 2', expected: [6, 3, '/', 3, '+', 1, 2, '/', '-'] },
+        { input: '(6 /3)+ 3 -1 /2', expected: [6, 3, '/', 3, '+', 1, 2, '/', '-'] },
+    ];
+    let passed = true;
+    for (let i = 0; i < testCases.length; i++) {
+        let testCase = testCases[i];
+        let actual = infixToPostfix(testCase.input);
+        if (JSON.stringify(actual) !== JSON.stringify(testCase.expected)) {
+            console.log('testInfixToPostfix failed for input: ' + testCase.input);
+            console.log('expected: ' + JSON.stringify(testCase.expected));
+            console.log('actual: ' + JSON.stringify(actual));
+            passed = false;
+        }
+    }
+    return passed;
+}
+
 function testCalculator() {
     // test the calculator function using the examples above.
     // If the calculator function is correct, this function should return true.
@@ -180,8 +233,14 @@ function testCalculator() {
     return allPassed;
 }
 
-// main - test the calculator function
 function main() {
+    // run the test functions
+    if (testParseMathExpressionToTokenList()) {
+        console.log('testParseMathExpressionToTokenList passed');
+    }
+    if (testInfixToPostfix()) {
+        console.log('testInfixToPostfix passed');
+    }
     if (testCalculator()) {
         console.log('All tests passed');
     }
