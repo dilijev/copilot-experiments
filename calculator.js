@@ -121,3 +121,50 @@ function parseMathExpressionToTokenList(inputString) {
         }
     }
 }
+
+
+function calculator(inputString) {
+    // write a 4-function calculator with parentheses that parses the input string as tokens
+    // using the parseMathExpressionToTokenList function
+    // converts that list to postfix notation using the infixToPostfix function
+    // and evaluates the expression in postfix notation using the evalutePostfix function
+    //
+    // Operators are:
+    // * is multiplication
+    // / is division
+    // + is addition
+    // - is subtraction
+    // ( and ) are parentheses
+    //
+    // Operands may contain a decimal point and may not be negative.
+    // There is no unary minus.
+    //
+    // Input string is guaranteed to be non-ambiguous.
+    //
+    // Example: 1 + 2 * 3 -> 7
+    // Example: 2.3+4.5*(6.7+1.2/2.0) -> 31.95
+    let tokens = parseMathExpressionToTokenList(inputString);
+    let postfix = infixToPostfix(tokens);
+    return evalutePostfix(postfix);
+}
+
+function testCalculator() {
+    // test the calculator function using the examples above.
+    // If the calculator function is correct, this function should return true.
+    let testCases = [
+        { input: '1 + 2 * 3', expected: 7 },
+        { input: '2.3+4.5*(6.7+1.2/2.0)', expected: 31.95 },
+        { input: '(1 + 2) * 3', expected: 9 },
+        { input: '(6 / 3) + 3 - 1 / 2', expected: 5.5 },
+        { input: '(6 /3)+ 3 -1 /2', expected: 5.5 },
+    ];
+    let allPassed = true;
+    testCases.forEach(testCase => {
+        let result = calculator(testCase.input);
+        if (result !== testCase.expected) {
+            console.log(`Test failed: input: ${testCase.input}, expected: ${testCase.expected}, actual: ${result}`);
+            allPassed = false;
+        }
+    });
+    return allPassed;
+}
