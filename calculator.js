@@ -252,18 +252,28 @@ function main() {
     // run the test functions
 
     // print a line explaining which test is running
+    console.log('----------------------------------');
     console.log('Running testParseMathExpressionToTokenList');
+    console.log('----------------------------------');
     if (testParseMathExpressionToTokenList()) {
         console.log('testParseMathExpressionToTokenList passed');
     }
+
+    console.log('----------------------------------');
     console.log('Running testInfixToPostfix');
+    console.log('----------------------------------');
     if (testInfixToPostfix()) {
         console.log('testInfixToPostfix passed');
     }
+
+    console.log('----------------------------------');
     console.log('Running testCalculator');
+    console.log('----------------------------------');
     if (testCalculator()) {
         console.log('All tests passed');
     }
+
+    console.log('----------------------------------');
 }
 
 main();
