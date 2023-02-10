@@ -57,6 +57,8 @@ Off the top of my head I knew I could write suitable JS in a few minutes to do t
 
 I was _really_ very much trying to see what Copilot would write and how much I would have to prompt it to get the result. I did my best to accept prompts that weren't obviously wrong, even suggestions for continuations of the prompt comments as I was writing them, unless the suggestions would derail from what I was getting at.
 
+To be clear, Copilot even wrote some of the prompt comments, and I went with it where it seemed broadly on-track. I didn't do a good job in the source of distinguishing which were mine and which were Copilot's.
+
 It's been a long time since I wrote a stack-based calculator exercise so I didn't know the specifics off the top of my head without really thinking it through or looking up an algorithm, so I was relatively unspoiled on being able to spot-check the large chunks of code Copilot wrote for anything but the most obvious errors, until it came time to bugfix.
 
 As I mention in the comments, I was impressed that Copilot managed to write what appeared to be a complete calculator from my prompts, but when I ran the test cases, it hilariously failed every single one at first.
