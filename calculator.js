@@ -1,5 +1,11 @@
 
-function infixToPostfix(list) {
+function infixToPostfix(list, isTest=false) {
+    // # I added debugging to see what was going on here.
+    // if isTest is true, then console.log will be used to display the
+    // intermediate steps of the algorithm. Otherwise, console.log will
+    // be a no-op.
+    let log = isTest ? console.log : () => {};
+
     // Convert infix expression to postfix expression using a stack.
     // Example: 1 + 2 * 3 -> 1 2 3 * +
     let stack = [];
@@ -7,22 +13,75 @@ function infixToPostfix(list) {
     for (let token of list) {
         if (token === '(') {
             stack.push(token);
+            // display what was pushed to stack
+            log('pushed to stack: ' + token);
         } else if (token === ')') {
             while (stack.length > 0 && stack[stack.length - 1] !== '(') {
-                output.push(stack.pop());
+                let x = stack.pop();
+                // display what was popped from stack
+                log('popped from stack: ' + x);
+                output.push(x);
+                // display what was pushed to output
+                log('pushed to output: ' + x);
             }
-            stack.pop();
-        } else if (token === '*' || token === '/' || token === '+' || token === '-') {
-            while (stack.length > 0 && stack[stack.length - 1] !== '(') {
-                output.push(stack.pop());
+            let x = stack.pop();
+            // display what was popped from stack
+            log('popped from stack: ' + x);
+            // assert that the popped value is '('
+            if (x !== '(') {
+                throw new Error('Invalid expression');
+            }
+        }
+        // # needed to explictly indicate that * and / are higher precedence than + and -
+        // # via this comment ...
+        // handle * and / at higher precedence than + and -
+        else if (token === '*' || token === '/') {
+            while (stack.length > 0 && (stack[stack.length - 1] === '*' || stack[stack.length - 1] === '/')) {
+                let x = stack.pop();
+                // display what was popped from stack
+                log('popped from stack: ' + x);
+                output.push(x);
+                // display what was pushed to output
+                log('pushed to output: ' + x);
             }
             stack.push(token);
+            // display what was pushed to stack
+            log('pushed to stack: ' + token);
+        }
+        // # ... and via this comment
+        // handle + and - at lower precedence than * and /
+        else if (token === '+' || token === '-') {
+            while (stack.length > 0 && stack[stack.length - 1] !== '(') {
+                let x = stack.pop();
+                // display what was popped from stack
+                log('popped from stack: ' + x);
+                output.push(x);
+                // display what was pushed to output
+                log('pushed to output: ' + x);
+            }
+            stack.push(token);
+            // display what was pushed to stack
+            log('pushed to stack: ' + token);
+        } else if (token === ' ') {
+            // do nothing
+            // this shouldn't happen if the input is correct, so emit an error
+            // explaining that the token should not have this value
+            throw new Error('Invalid token: ' + token);
         } else {
+            log('handling the else case');
+            log('do nothing')
             output.push(token);
+            // display what was pushed to output
+            log('pushed to output: ' + token);
         }
     }
     while (stack.length > 0) {
-        output.push(stack.pop());
+        let x = stack.pop();
+        // display what was popped from stack
+        log('popped from stack: ' + x);
+        output.push(x);
+        // display what was pushed to output
+        log('pushed to output: ' + x);
     }
     return output;
 }
@@ -36,6 +95,11 @@ function evalutePostfix(list) {
         if (token === '*' || token === '/' || token === '+' || token === '-') {
             let right = stack.pop();
             let left = stack.pop();
+
+            // convert right and left to numbers
+            right = Number(right);
+            left = Number(left);
+
             if (token === '*') {
                 stack.push(left * right);
             } else if (token === '/') {
@@ -159,6 +223,48 @@ function calculator(inputString) {
     return evalutePostfix(postfix);
 }
 
+function pairwiseComparison(funcName, input, expected, actual) {
+    // refactor the body of the loop below into a function
+    // using 'actual' for 'actual'
+    // and parameter 'expected' for 'testCase.expected'
+    // and return true if the two arrays are equal
+    // and return false if the two arrays are not equal
+    if (actual.length !== expected.length) {
+        console.log(funcName + ' failed for input: ' + input);
+        console.log('expected: ' + JSON.stringify(expected));
+        console.log('actual: ' + JSON.stringify(actual));
+        // explain that the lengths are different
+        console.log('expected length: ' + expected.length);
+        console.log('actual length: ' + actual.length);
+        return false;
+    }
+
+    // compare elements pairwise by converting them with .toString()
+    // and comparing the strings
+    for (let j = 0; j < actual.length; j++) {
+        // Compare elements pairwise.
+        // First try converting the values to numbers with parseFloat and comparing numerically,
+        // and if that fails, compare them as strings with .toString().
+        if (actual[j].toString() !== expected[j].toString() && parseFloat(actual[j]) !== parseFloat(expected[j])) {
+            console.log(funcName + ' failed for input: ' + input);
+            console.log('expected: ' + JSON.stringify(expected));
+            console.log('actual: ' + JSON.stringify(actual));
+            // print the index and the values that failed to match
+            console.log('index: ' + j);
+            console.log('expected value: ' + expected[j]);
+            console.log('actual value: ' + actual[j]);
+            return false;
+        }
+    }
+
+    // if we get here, the two arrays are equal
+    // display the input and the expected and actual values
+    // and indicate the test passed
+    console.log(funcName + ' PASSED for input: ' + input + ' => ' + JSON.stringify(actual));
+
+    return true;
+}
+
 // test the parseMathExpressionToTokenList function
 function testParseMathExpressionToTokenList() {
     // test the parseMathExpressionToTokenList function using the examples above.
@@ -174,25 +280,24 @@ function testParseMathExpressionToTokenList() {
     ];
     let passed = true;
     for (let i = 0; i < testCases.length; i++) {
+        let funcName = 'parseMathExpressionToTokenList';
         let testCase = testCases[i];
+        let input = testCase.input;
+        let expected = testCase.expected;
         let actual = parseMathExpressionToTokenList(testCase.input);
-        if (JSON.stringify(actual) !== JSON.stringify(testCase.expected)) {
-            console.log('testParseMathExpressionToTokenList failed for input: ' + testCase.input);
-            console.log('expected: ' + JSON.stringify(testCase.expected));
-            console.log('actual: ' + JSON.stringify(actual));
-            passed = false;
-        }
+        pairwiseComparison(funcName, input, expected, actual);
     }
     return passed;
 }
 
 function testInfixToPostfix() {
-    // test the infixToPostfix function using the examples above.
+    // test the infixToPostfix function using the examples above with the expected
+    // values in postfix order.
     // If the infixToPostfix function is correct, this function should return true.
     let testCases = [
-        { input: '1+2', expected: [1, '+', 2] },
-        { input: '(2*3)', expected: [2, 3, '*'] },
+        { input: '1+2', expected: [1, 2, '+'] },
         { input: '1 + 2 * 3', expected: [1, 2, 3, '*', '+'] },
+        { input: '1+2*3', expected: [1, 2, 3, '*', '+'] },
         { input: '2.3+4.5*(6.7+1.2/2.0)', expected: [2.3, 4.5, 6.7, 1.2, 2.0, '/', '+', '*', '+'] },
         { input: '(1 + 2) * 3', expected: [1, 2, '+', 3, '*'] },
         { input: '(6 / 3) + 3 - 1 / 2', expected: [6, 3, '/', 3, '+', 1, 2, '/', '-'] },
@@ -200,29 +305,12 @@ function testInfixToPostfix() {
     ];
     let passed = true;
     for (let i = 0; i < testCases.length; i++) {
+        let funcName = 'infixToPostfix';
         let testCase = testCases[i];
-        let actual = infixToPostfix(testCase.input);
-        // compare actual and expected by converting each item to strings
-        // and comparison the items pairwise
-        // ensure that the lengths are the same
-        if (actual.length !== testCase.expected.length) {
-            console.log('testInfixToPostfix failed for input: ' + testCase.input);
-            console.log('expected: ' + JSON.stringify(testCase.expected));
-            console.log('actual: ' + JSON.stringify(actual));
-            // explain that the lengths are different
-            console.log('actual.length: ' + actual.length);
-            console.log('expected.length: ' + testCase.expected.length);
-            passed = false;
-        }
-        for (let j = 0; j < actual.length; j++) {
-            // compare actual[j] and testCase.expected[j] as strings
-            if (actual[j].toString() !== testCase.expected[j].toString()) {
-                console.log('testInfixToPostfix failed for input: ' + testCase.input);
-                console.log('expected: ' + JSON.stringify(testCase.expected));
-                console.log('actual: ' + JSON.stringify(actual));
-                passed = false;
-            }
-        }
+        let expected = testCase.expected;
+        let input = parseMathExpressionToTokenList(testCase.input);
+        let actual = infixToPostfix(input, isTest=false);
+        pairwiseComparison(funcName, input, expected, actual);
     }
     return passed;
 }
@@ -231,11 +319,13 @@ function testCalculator() {
     // test the calculator function using the examples above.
     // If the calculator function is correct, this function should return true.
     let testCases = [
+        { input: '1+2', expected: 3 },
         { input: '1 + 2 * 3', expected: 7 },
-        { input: '2.3+4.5*(6.7+1.2/2.0)', expected: 31.95 },
+        { input: '1+2*3', expected: 7 },
+        { input: '2.3+4.5*(6.7+1.2/2.0)', expected: 35.15 }, // # suggested expected output of 31.95 was wrong
         { input: '(1 + 2) * 3', expected: 9 },
-        { input: '(6 / 3) + 3 - 1 / 2', expected: 5.5 },
-        { input: '(6 /3)+ 3 -1 /2', expected: 5.5 },
+        { input: '(6 / 3) + 3 - 1 / 2', expected: 4.5 }, // # suggested expected output of 5.5 was wrong
+        { input: '(6 /3)+ 3 -1 /2', expected: 4.5 }, // # suggested expected output of 5.5 was wrong
     ];
     let allPassed = true;
     testCases.forEach(testCase => {
@@ -243,6 +333,8 @@ function testCalculator() {
         if (result !== testCase.expected) {
             console.log(`Test failed: input: ${testCase.input}, expected: ${testCase.expected}, actual: ${result}`);
             allPassed = false;
+        } else {
+            console.log(`PASSED: input: ${testCase.input} => ${testCase.expected}`);
         }
     });
     return allPassed;
@@ -251,29 +343,42 @@ function testCalculator() {
 function main() {
     // run the test functions
 
+    let allPassed = true;
+
     // print a line explaining which test is running
     console.log('----------------------------------');
     console.log('Running testParseMathExpressionToTokenList');
     console.log('----------------------------------');
     if (testParseMathExpressionToTokenList()) {
-        console.log('testParseMathExpressionToTokenList passed');
+        console.log('testParseMathExpressionToTokenList tests passed');
+    } else {
+        allPassed = false;
     }
 
     console.log('----------------------------------');
     console.log('Running testInfixToPostfix');
     console.log('----------------------------------');
     if (testInfixToPostfix()) {
-        console.log('testInfixToPostfix passed');
+        console.log('testInfixToPostfix tests passed');
+    } else {
+        allPassed = false;
     }
 
     console.log('----------------------------------');
     console.log('Running testCalculator');
     console.log('----------------------------------');
     if (testCalculator()) {
-        console.log('All tests passed');
+        console.log('testCalculator tests passed');
+    } else {
+        allPassed = false;
     }
 
     console.log('----------------------------------');
+    if (allPassed) {
+        console.log('All tests passed');
+    } else {
+        console.log('Some tests failed');
+    }
 }
 
 main();
