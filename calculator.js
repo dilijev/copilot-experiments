@@ -104,6 +104,9 @@ function parseMathExpressionToTokenList(inputString) {
                 token += char;
                 state = 'decimal';
             } else {
+                // # Needed this prompt to fix a bug.
+                // convert token to a number
+                token = parseFloat(token);
                 tokens.push(token);
                 token = '';
                 state = 'start';
