@@ -50,3 +50,28 @@ Off the top of my head I knew I could write suitable JS in a few minutes to do t
 - The specific name of the `<element>.classList` property.
 - The choice to use `querySelectorAll` instead of `getElementsByClassName` (which is more a stylistic thing, maybe, I haven't used `querySelectorAll` as often but I usually save it for more complicated CSS-selector type queries than this).
 
+
+# Commentary on Specific Files
+
+## calculator.js
+
+I was _really_ very much trying to see what Copilot would write and how much I would have to prompt it to get the result. I did my best to accept prompts that weren't obviously wrong, even suggestions for continuations of the prompt comments as I was writing them, unless the suggestions would derail from what I was getting at.
+
+It's been a long time since I wrote a stack-based calculator exercise so I didn't know the specifics off the top of my head without really thinking it through or looking up an algorithm, so I was relatively unspoiled on being able to spot-check the large chunks of code Copilot wrote for anything but the most obvious errors, until it came time to bugfix.
+
+As I mention in the comments, I was impressed that Copilot managed to write what appeared to be a complete calculator from my prompts, but when I ran the test cases, it hilariously failed every single one at first.
+
+I want to make it clear that except where otherwise indicated in the history or via `// #` comments, Copilot wrote the code from the `//` comments provided, except for:
+
+- function names
+- a few additional test cases (copilot did its own suggesting from examples I provided in the prompt comments, some of which Copilot suggested as I was typing)
+- the test code refactoring I did during the bugfix phase
+- some bugfixes I did
+
+Perhaps because this is a common coding exercise with lots of solutions available online, Copilot generated entire functions in a single suggestion, and enhancements were made for my own taste or debugging purposes later on via additional prompts.
+
+I was very impressed that Copilot generated an entire token parsing state machine from my simple description in just a few seconds, and it was almost entirely right.
+
+Copilot did make several very common Javascript mistakes about type confusion between numbers and strings in several places, which made up the majority of the bugs that needed fixing. That makes me wonder about the quality of the code in the training set, or whether the code was adapted from another language into Javascript without respect for the semantics gotchas.
+
+I added some rejected functions in `calculator-rejected.js`. Believe it or not, besides those, Copilot generated very little in the way of poor code suggestions other than those which were obviously incorrect or the result of unclear prompting.
