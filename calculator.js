@@ -250,12 +250,17 @@ function testCalculator() {
 
 function main() {
     // run the test functions
+
+    // print a line explaining which test is running
+    console.log('Running testParseMathExpressionToTokenList');
     if (testParseMathExpressionToTokenList()) {
         console.log('testParseMathExpressionToTokenList passed');
     }
+    console.log('Running testInfixToPostfix');
     if (testInfixToPostfix()) {
         console.log('testInfixToPostfix passed');
     }
+    console.log('Running testCalculator');
     if (testCalculator()) {
         console.log('All tests passed');
     }
