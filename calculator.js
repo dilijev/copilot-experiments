@@ -122,7 +122,6 @@ function parseMathExpressionToTokenList(inputString) {
     }
 }
 
-
 function calculator(inputString) {
     // write a 4-function calculator with parentheses that parses the input string as tokens
     // using the parseMathExpressionToTokenList function
@@ -168,3 +167,12 @@ function testCalculator() {
     });
     return allPassed;
 }
+
+// main - test the calculator function
+function main() {
+    if (testCalculator()) {
+        console.log('All tests passed');
+    }
+}
+
+main();
