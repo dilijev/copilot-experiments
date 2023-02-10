@@ -44,8 +44,9 @@ for (let div of document.querySelectorAll('.content-hidden')) {
 
 I stopped typing after `for` and Copilot suggested the rest.
 
-Off the top of my head I knew I could write suitable JS in a few minutes to do this, perhaps via a few trial-and-error steps, but I wanted to see what Copilot would produce. I may be overstating the point in terms of raw time saved on research, but it produced immediately-obvious correct code on the first try, and I didn't have to look up (or bugfix) any of the following:
+Off the top of my head I knew I could write suitable JS in a few minutes to do this, perhaps via a few trial-and-error steps, but I wanted to see what Copilot would produce. I may be overstating the point in terms of raw time saved on research, but it produced immediately, obviously correct code on the first try (or, close enough, maybe I meant specifically div's whereas Copilot interpreted that as a variable loop name, but this was more than good enough for a quick hack I needed to check something, and I didn't have to look up (or bugfix) any of the following:
 
 - The difference between `of` and `in` for `for` loops over lists in JS.
 - The specific name of the `<element>.classList` property.
-- The choice to use `querySelectorAll` 
+- The choice to use `querySelectorAll` instead of `getElementsByClassName` (which is more a stylistic thing, maybe, I haven't used `querySelectorAll` as often but I usually save it for more complicated CSS-selector type queries than this).
+
