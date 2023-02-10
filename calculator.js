@@ -202,6 +202,17 @@ function testInfixToPostfix() {
     for (let i = 0; i < testCases.length; i++) {
         let testCase = testCases[i];
         let actual = infixToPostfix(testCase.input);
+        // compare actual and expected by converting each item to strings
+        // and comparison the items pairwise
+        for (let j = 0; j < actual.length; j++) {
+            if (actual[j] !== testCase.expected[j]) {
+                console.log('testInfixToPostfix failed for input: ' + testCase.input);
+                console.log('expected: ' + JSON.stringify(testCase.expected));
+                console.log('actual: ' + JSON.stringify(actual));
+                passed = false;
+            }
+        }
+
         if (JSON.stringify(actual) !== JSON.stringify(testCase.expected)) {
             console.log('testInfixToPostfix failed for input: ' + testCase.input);
             console.log('expected: ' + JSON.stringify(testCase.expected));
