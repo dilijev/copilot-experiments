@@ -120,6 +120,15 @@ function parseMathExpressionToTokenList(inputString) {
             }
         }
     }
+
+    // # apparently it wasn't finished generating this function,
+    // # but it added this when I went back and prompted it after the test failed.
+
+    // return the list of tokens
+    if (token !== '') {
+        tokens.push(token);
+    }
+    return tokens;
 }
 
 function calculator(inputString) {
