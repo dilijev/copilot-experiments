@@ -58,3 +58,66 @@ function evalutePostfix(list) {
     // return the result
     return stack.pop();
 }
+
+
+function parseMathExpressionToTokenList(inputString) {
+    // Given a string as input containing a mathematical expression,
+    // parse it into tokens.
+    // The tokens are not delimited by spaces, but the input is guaranteed
+    // to be non-ambiguous. Use a state machine to parse the input, locating
+    // the operators and the operands and adding them to a list of tokens.
+    //
+    // The valid operators are are:
+    // * is multiplication
+    // / is division
+    // + is addition
+    // - is subtraction
+    // ( and ) are parentheses
+    //
+    // Numbers may contain a decimal point and may not be negative.
+    // There is no unary minus.
+    //
+    // Example: 1 + 2 * 3 -> 7
+    // Example: 2.3+4.5*(6.7+1.2/2.0) -> 31.95
+    let tokens = [];
+    let state = 'start';
+    let token = '';
+    for (let i = 0; i < inputString.length; i++) {
+        let char = inputString[i];
+        if (state === 'start') {
+            if (char === ' ') {
+                // ignore whitespace
+            } else if (char === '*' || char === '/' || char === '+' || char === '-') {
+                tokens.push(char);
+            } else if (char === '(' || char === ')') {
+                tokens.push(char);
+            } else if (char >= '0' && char <= '9') {
+                token += char;
+                state = 'number';
+            } else {
+                throw new Error('Invalid input');
+            }
+        } else if (state === 'number') {
+            if (char >= '0' && char <= '9') {
+                token += char;
+            } else if (char === '.') {
+                token += char;
+                state = 'decimal';
+            } else {
+                tokens.push(token);
+                token = '';
+                state = 'start';
+                i--;
+            }
+        } else if (state === 'decimal') {
+            if (char >= '0' && char <= '9') {
+                token += char;
+            } else {
+                tokens.push(token);
+                token = '';
+                state = 'start';
+                i--;
+            }
+        }
+    }
+}
