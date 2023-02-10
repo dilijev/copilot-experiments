@@ -61,6 +61,17 @@ It's been a long time since I wrote a stack-based calculator exercise so I didn'
 
 As I mention in the comments, I was impressed that Copilot managed to write what appeared to be a complete calculator from my prompts, but when I ran the test cases, it hilariously failed every single one at first.
 
+```
+$ node calculator.js
+Test failed: input: 1 + 2 * 3, expected: 7, actual: 36
+Test failed: input: 2.3+4.5*(6.7+1.2/2.0), expected: 31.95, actual: NaN
+Test failed: input: (1 + 2) * 3, expected: 9, actual: 36
+Test failed: input: (6 / 3) + 3 - 1 / 2, expected: 5.5, actual: 11
+Test failed: input: (6 /3)+ 3 -1 /2, expected: 5.5, actual: 11
+```
+
+I didn't notice until almost all the tests were passing that a few of the generated tests had incorrect expected results.
+
 I want to make it clear that except where otherwise indicated in the history or via `// #` comments, Copilot wrote the code from the `//` comments provided, except for:
 
 - function names
